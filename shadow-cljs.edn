@@ -1,0 +1,19 @@
+;; shadow-cljs configuration
+{:source-paths
+ ["src/dev"    ;; Development specific files
+  "src/main"   ;; Main application code
+  "src/test"]  ;; Tests
+
+ :dependencies
+ [[reagent "1.2.0"]] ;; Reagent dependency for React-like components 
+ 
+ :dev-http   {8000 "public"} ;; Development server configuration
+
+ :builds
+ {:app
+  {:target     :browser          ;; Target environment
+   :output-dir "public/js"       ;; Directory for generated JS files
+   :asset-path "/js"             ;; Path for loading assets
+   :modules    {:main {:init-fn recipe-app.core/init}} ;; Main app entry point
+   }}
+}
