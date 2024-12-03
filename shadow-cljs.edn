@@ -5,7 +5,10 @@
   "src/test"]  ;; Tests
 
  :dependencies
- [[reagent "1.2.0"]] ;; Reagent dependency for React-like components 
+ [[reagent "1.2.0"] ;; Reagent dependency for React-like components - https://reagent-project.github.io
+  [ cljs-http "0.1.48"] ;; cljs-http dependency for HTTP requests - https://github.com/r0man/cljs-http
+  [clj-commons/cljss "1.6.4"] ;; cljss dependency for CSS-in-JS - https://github.com/clj-commons/cljss
+  ] 
  
  :dev-http   {8000 "public"} ;; Development server configuration
 
@@ -15,5 +18,8 @@
    :output-dir "public/js"       ;; Directory for generated JS files
    :asset-path "/js"             ;; Path for loading assets
    :modules    {:main {:init-fn recipe-app.core/init}} ;; Main app entry point
+   :devtools
+   {:reload-strategy :full ;; Enables hot reloading
+    :watch-dir "public"} 
    }}
 }
