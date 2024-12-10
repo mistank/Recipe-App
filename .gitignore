@@ -11,7 +11,8 @@ node_modules
 .shadow-cljs
 
 # Public compiled files
-public/js
+**/public/js
+**/target
 
 # Environment files
-.env
+**/.env
