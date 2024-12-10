@@ -1,21 +1,21 @@
-;; shadow-cljs configuration
 {:source-paths
- ["src/dev"    ;; Development specific files
-  "src/main"   ;; Main application code
-  "src/test"]  ;; Tests
+ ["frontend/src/dev"    ;; Development specific files
+  "frontend/src/main"   ;; Main application code
+  "frontend/src/test"]  ;; Tests
 
  :dependencies
  [[reagent "1.2.0"] ;; Reagent dependency for React-like components - https://reagent-project.github.io
   [ cljs-http "0.1.48"] ;; cljs-http dependency for HTTP requests - https://github.com/r0man/cljs-http
   [clj-commons/cljss "1.6.4"] ;; cljss dependency for CSS-in-JS - https://github.com/clj-commons/cljss
+  [lynxeyes/dotenv "1.1.0"]
   ] 
  
- :dev-http   {8000 "public"} ;; Development server configuration
+ :dev-http   {8000 "frontend/public"} ;; Development server configuration
 
  :builds
  {:app
   {:target     :browser          ;; Target environment
-   :output-dir "public/js"       ;; Directory for generated JS files
+   :output-dir "frontend/public/js"       ;; Directory for generated JS files
    :asset-path "/js"             ;; Path for loading assets
    :modules    {:main {:init-fn recipe-app.core/init}} ;; Main app entry point
    :devtools

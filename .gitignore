@@ -5,9 +5,13 @@ node_modules
 .calva
 .clj-kondo
 .lsp
+.vscode
 
 # Shadow-cljs temp files
 .shadow-cljs
 
 # Public compiled files
 public/js
+
+# Environment files
+.env
