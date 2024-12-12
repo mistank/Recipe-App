@@ -1,7 +1,7 @@
-(ns recipe-app.api
+(ns api
   (:require [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]
-            [recipe-app.state :refer [app-state]])
+            [state :refer [app-state]])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
 (defn fetch-recipes [query]

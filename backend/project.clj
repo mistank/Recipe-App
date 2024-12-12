@@ -7,6 +7,7 @@
                  [lynxeyes/dotenv "1.1.0"]
                  [clj-http "3.12.3"]
                  [ring/ring-json "0.5.1"]]
+    :plugins [[lein-auto "0.1.3"]]
   :main ^:skip-aot recipe-app.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
