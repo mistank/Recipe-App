@@ -3,4 +3,7 @@
 (defn wrap-cors [handler]
   (fn [req]
     (let [response (handler req)]
-      (assoc-in response [:headers "Access-Control-Allow-Origin"] "*"))))
+      (-> response
+          (assoc-in [:headers "Access-Control-Allow-Origin"] "*")
+          (assoc-in [:headers "Access-Control-Allow-Methods"] "GET, POST, PUT, DELETE, OPTIONS")
+          (assoc-in [:headers "Access-Control-Allow-Headers"] "Content-Type, Authorization")))))
