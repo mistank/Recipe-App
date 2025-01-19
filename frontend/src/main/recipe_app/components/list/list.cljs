@@ -7,13 +7,8 @@
 (defn recipe-list []
   (let [recipes (:recipes @app-state)]
     (if (seq recipes)
-      [:div {:className (list-style)}
-       (println recipes)
-       (js/console.log "Recipes:" (clj->js (:recipes @app-state)))
+      [:div {:style list-style}
        (for [recipe-data recipes]
-         (do
-           (js/console.log "Recipe Data:" (clj->js recipe-data))
-           (if (map? recipe-data)
-             ^{:key (:idMeal recipe-data)} [recipe recipe-data]
-             [:p "Invalid recipe data"])))]
-      [:p "No recipes found. Try searching with different ingredients."])))
+         ^{:key (:idMeal recipe-data)} 
+         [recipe recipe-data])] 
+      [:div "No recipes found."])))
