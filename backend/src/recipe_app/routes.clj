@@ -1,8 +1,27 @@
 (ns recipe-app.routes
-  (:require [compojure.core :refer [defroutes GET]]
+  (:require [compojure.core :refer [defroutes GET POST]]
             [ring.util.response :refer [response]]
             [clj-http.client :as http]
-            [envvar.core :refer [env]]))
+            [ring.middleware.json :refer [wrap-json-body wrap-json-response]]
+            [envvar.core :refer [env]]
+            [recipe-app.food-detection :refer [detect-objects]]))
+
+(defn handle-food-detection [image-path]
+  (if (nil? image-path)
+    {:status 400
+     :headers {"Content-Type" "application/json"}
+     :body {:error "Image path is missing"}}
+    (try
+      (let [model-path "backend/src/resources/models/ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8/saved_model/saved_model.pb"
+            detections (detect-objects model-path image-path)]
+        {:status 200
+         :headers {"Content-Type" "application/json"}
+         :body {:detections detections}})
+      (catch Exception e
+        {:status 500
+         :headers {"Content-Type" "application/json"}
+         :body {:error "An error occurred while detecting food"
+                :message (.getMessage e)}}))))
 
 (defroutes app-routes
   (GET "/hello" []
@@ -30,4 +49,14 @@
             {:status 500
              :headers {"Content-Type" "application/json"}
              :body {:error "An error occurred while fetching recipes"
-                    :message (.getMessage e)}}))))))
+                    :message (.getMessage e)}})))))
+
+  (POST "/api/detect-food" {body :body}
+    (println "Body:" body)
+    (let [image-path (:image body)]
+      (handle-food-detection image-path))))
+
+(def app
+  (-> app-routes
+      (wrap-json-body {:keywords? true})
+      wrap-json-response))

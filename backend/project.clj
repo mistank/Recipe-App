@@ -6,7 +6,12 @@
                  [compojure "1.6.2"]
                  [clj-http "3.12.3"]
                  [ring/ring-json "0.5.1"]
-                 [envvar "1.1.2"]]
+                 [envvar "1.1.2"]
+                 [org.tensorflow/tensorflow-core-api "1.0.0"]
+                 [org.tensorflow/tensorflow-core-native "1.0.0"]
+                 [org.tensorflow/tensorflow-core-platform "1.0.0" ]
+                 [cheshire "5.10.0"]
+                 ]
   
     :plugins [[lein-auto "0.1.3"]]
   :main ^:skip-aot recipe-app.core
