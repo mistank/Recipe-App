@@ -12,7 +12,7 @@
      :headers {"Content-Type" "application/json"}
      :body {:error "Image path is missing"}}
     (try
-      (let [model-path "backend/src/resources/models/ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8/saved_model/saved_model.pb"
+      (let [model-path "/Users/milan/ClojureProjects/Recipe-Generator/backend/src/resources/models/ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8/saved_model"
             detections (detect-objects model-path image-path)]
         {:status 200
          :headers {"Content-Type" "application/json"}
