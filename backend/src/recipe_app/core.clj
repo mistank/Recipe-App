@@ -1,21 +1,28 @@
 (ns recipe-app.core
   (:require [ring.adapter.jetty :refer [run-jetty]]
-            [recipe-app.routes :refer [app-routes]]
-            [envvar.core :as envvar :refer [env]]
-            [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
-            [ring.middleware.params :refer [wrap-params]]
-            [recipe-app.middleware :refer [wrap-cors]]))
+            [recipe-app.routes :refer [app]]
+            [envvar.core :as envvar]
+            [clojure.java.io :as io])
+  (:gen-class))
 
-;; Middleware
-(def app-with-middleware 
-  (-> app-routes
-      (wrap-json-body {:keywords? true}) ;; Parsira JSON body zahteve
-      wrap-json-response                 ;; JSON response
-      wrap-cors                          ;; CORS podrška
-      wrap-params))                      ;; Parsira query parametre
+(try 
+  (envvar/load-file-variables! ".env")
+  (catch Exception e 
+    (println "No .env file found, using system environment")))
 
-(envvar/load-file-variables! "./../.env")
+(defn create-directories []
+  (doseq [dir ["uploads" "test-images"]]
+    (let [dir-file (io/file dir)]
+      (when-not (.exists dir-file)
+        (.mkdirs dir-file)
+        (println "Created directory:" dir)))))
 
-(defn -main [] 
+(defn -main []
+  (println "Starting Recipe App Food Detection Server...")
+  (println "Creating necessary directories...")
+  (create-directories)
+  
   (println "Starting server on port 3000...")
-  (run-jetty app-with-middleware {:port 3000 :join? false}))
+  (run-jetty app {:port 3000 
+                  :join? false
+                  :max-threads 50}))

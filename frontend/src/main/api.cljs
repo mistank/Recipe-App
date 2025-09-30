@@ -1,27 +1,35 @@
 (ns api
-  (:require [cljs-http.client :as http]
-            [cljs.core.async :refer [<!]]
-            [clojure.string :as str] 
-            [state :refer [app-state]])
-  (:require-macros [cljs.core.async.macros :refer [go]]))
+  (:require [state :refer [app-state]]))
 
-(defn fetch-recipes []
-  (let [ingredients (:ingredients @app-state)]
-    (if (empty? ingredients) 
-      (js/console.error "No ingredients provided!") 
-      (let [formatted-ingredients (str/join "," (map #(str/replace % " " "_") ingredients))
-            url (str "http://localhost:3000/api/recipes?ingredients=" formatted-ingredients)]
-        (go
-          (let [response (<! (http/get url {:with-credentials? false}))]
-            (if (= 200 (:status response))
-              (let [recipes (get-in response [:body :meals])]
-                (if recipes
-                  (do
-                    (swap! app-state assoc :recipes recipes)
-                    )
-                  (do
-                    (js/console.warn "No recipes found for the given ingredients.")
-                    (swap! app-state assoc :recipes []))))
-              (do
-                (js/console.error "Failed to fetch recipes. Status:" (:status response))
-                (swap! app-state assoc :recipes [])))))))))
+(defn upload-image-and-detect [file]
+  (swap! app-state assoc :loading true :error nil)
+  
+  (let [form-data (js/FormData.)
+        url "http://localhost:3000/api/detect-food"]
+    
+    (.append form-data "image" file)
+    
+    (-> (js/fetch url 
+          (clj->js {:method "POST"
+                    :body form-data}))
+        (.then #(.json %))
+        (.then (fn [response]
+                 (let [data (js->clj response :keywordize-keys true)]
+                   (if (:success data)
+                     (do
+                       (swap! app-state assoc 
+                              :detected-food (get-in data [:best_detection :food])
+                              :recipes (:meals data)
+                              :loading false
+                              :error nil)
+                       (js/console.log "Detection successful:" (clj->js data)))
+                     (do
+                       (swap! app-state assoc 
+                              :loading false
+                              :error (or (:error data) "Detection failed"))
+                       (js/console.error "Detection failed:" (clj->js data)))))))
+        (.catch (fn [error]
+                  (swap! app-state assoc 
+                         :loading false
+                         :error (str "Network error: " (.-message error)))
+                  (js/console.error "Error:" error))))))

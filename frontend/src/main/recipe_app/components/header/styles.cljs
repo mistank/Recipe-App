@@ -2,6 +2,8 @@
 
 (def header-style
   {:text-align "center"
-   :padding "20px"
-   :background-color "#f8f9fa"
-   :border-bottom "1px solid #dee2e6"})
+   :padding "30px"
+   :background-color "#007bff"
+   :color "white"
+   :border-bottom "3px solid #0056b3"
+   :box-shadow "0 2px 4px rgba(0,0,0,0.1)"})
