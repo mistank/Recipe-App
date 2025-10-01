@@ -67,7 +67,7 @@ lein run
 
 Backend starts at `http://localhost:3000`
 
-### Start Frontend (Port 8020)
+### Start Frontend (Port 8000)
 
 In a separate terminal:
 
@@ -76,9 +76,9 @@ cd frontend
 npx shadow-cljs watch app
 ```
 
-Frontend starts at `http://localhost:8020`
+Frontend starts at `http://localhost:8000`
 
-Open browser: `http://localhost:8020`
+Open browser: `http://localhost:8000`
 
 ---
 
@@ -200,8 +200,8 @@ Recipe-App/
 # Find process on port 3000
 lsof -ti:3000 | xargs kill -9
 
-# Find process on port 8020
-lsof -ti:8020 | xargs kill -9
+# Find process on port 8000
+lsof -ti:8000 | xargs kill -9
 ```
 
 **Backend won't start:**
